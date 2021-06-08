@@ -4,9 +4,17 @@
  *
  */
 import React, { memo } from 'react';
+import { Header } from '../../components/layout/Main/Header';
 
-interface Props {}
+interface Props {
+  children: any;
+}
 
-export const DefaultLayout = memo((props: Props) => {
-  return <div></div>;
+export const DefaultLayout = memo(({ children }: Props) => {
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
 });

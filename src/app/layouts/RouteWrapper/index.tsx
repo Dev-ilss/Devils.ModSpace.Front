@@ -4,9 +4,21 @@
  *
  */
 import React, { memo } from 'react';
+import { Route } from 'react-router-dom';
 
-interface Props {}
+const RouteWrapper = ({
+  component: Component,
+  layout: Layout,
+  ...routeConfig
+}) => (
+  <Route
+    {...routeConfig}
+    render={props => (
+      <Layout {...props}>
+        <Component {...props} />
+      </Layout>
+    )}
+  />
+);
 
-export const RouteWrapper = memo((props: Props) => {
-  return <div></div>;
-});
+export default memo(RouteWrapper);
