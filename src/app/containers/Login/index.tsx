@@ -5,28 +5,46 @@
  */
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { useAuthSlice } from '../../slices/AuthSlice';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../slices/AuthSlice/selectors';
 
-interface Props {}
+import { LoginDto } from '../../services/ms-service-proxy';
 
-export const Login = memo((props: Props) => {
+export const Login = memo(() => {
+  const { register, handleSubmit } = useForm<LoginDto>({
+    mode: 'onBlur',
+  });
+  const dispatch = useDispatch();
+  const { actions } = useAuthSlice();
+  const auth = useSelector(selectAuth);
+
+  const onSubmit = (data: LoginDto) => dispatch(actions.login(data));
+
   return (
     <>
       <div className="container mx-auto">
         <h2 className="text-center text-oxford-blue font-bold text-3xl mb-12">
           Inicia Sesión
         </h2>
-        <form className="w-4/5 mx-auto mb-4" onSubmit={e => console.log(e)}>
+        <form className="w-4/5 mx-auto mb-4" onSubmit={handleSubmit(onSubmit)}>
           <input
-            className="form-input rounded border-neon-blue border-2 py-4 w-full mb-8"
+            className={`form-input rounded border-2 py-4 w-full mb-8 ${
+              auth.error ? 'border-red-600 text-red-600' : 'border-neon-blue'
+            }`}
             type="email"
-            name="email"
+            {...register('email')}
             id="email"
             placeholder="Email"
           />
           <input
-            className="form-input rounded border-neon-blue border-2 py-4 w-full mb-8"
+            className={`form-input rounded border-2 py-4 w-full mb-8 ${
+              auth.error ? 'border-red-600 text-red-600' : 'border-neon-blue'
+            }`}
             type="password"
-            name="password"
+            {...register('password')}
             id="password"
             placeholder="Contraseña"
           />
@@ -46,6 +64,11 @@ export const Login = memo((props: Props) => {
           </Link>
           .
         </p>
+        {auth.error && (
+          <div className="w-4/5 mx-auto bg-red-300 border-red-600 border-2 py-4 px-6 text-red-600 rounded mt-10">
+            <p>{auth.error}</p>
+          </div>
+        )}
       </div>
     </>
   );
