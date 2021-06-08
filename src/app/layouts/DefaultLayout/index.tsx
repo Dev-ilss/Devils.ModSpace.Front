@@ -14,7 +14,7 @@ export const DefaultLayout = memo(({ children }: Props) => {
   return (
     <>
       <Header />
-      {children}
+      <div className="mt-16">{children}</div>
     </>
   );
 });
