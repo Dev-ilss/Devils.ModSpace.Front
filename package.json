@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "6.1.2",
     "@reduxjs/toolkit": "1.4.0",
+    "@tailwindcss/forms": "0.3.3",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.0.2",
     "@types/fontfaceobserver": "0.0.6",
