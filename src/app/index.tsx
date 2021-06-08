@@ -8,7 +8,7 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, BrowserRouter } from 'react-router-dom';
 
 import { Home } from './containers/Home/Loadable';
 import { Dashboard } from './containers/Dashboard/Loadable';
@@ -47,7 +47,7 @@ export function App() {
           component={Dashboard}
           layout={MainLayout}
         />
-        <Route component={NotFoundPage} />
+        <RouteWrapper component={NotFoundPage} layout={DefaultLayout} />
       </Switch>
     </BrowserRouter>
   );
