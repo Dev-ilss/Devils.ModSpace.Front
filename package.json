@@ -51,6 +51,7 @@
     "rimraf": "3.0.2",
     "serve": "11.3.2",
     "shelljs": "0.8.4",
+    "swagger-axios-codegen": "0.12.1",
     "ts-node": "9.0.0",
     "typescript": "4.1.3",
     "web-vitals": "0.2.4"
@@ -68,7 +69,9 @@
     "lint:fix": "yarn run eslint --fix src",
     "generate": "cross-env TS_NODE_PROJECT='./internals/ts-node.tsconfig.json' plop --plopfile internals/generators/plopfile.ts",
     "prettify": "prettier --write",
-    "extract-messages": "i18next-scanner --config=internals/extractMessages/i18next-scanner.config.js"
+    "extract-messages": "i18next-scanner --config=internals/extractMessages/i18next-scanner.config.js",
+    "clean:api": "rm -rf ./app/services/**",
+    "build:api": "npm run clean:api && node ./src/swagger/codegen.js"
   },
   "browserslist": {
     "production": [
