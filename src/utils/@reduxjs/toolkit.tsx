@@ -11,6 +11,7 @@ import {
 export const createSlice = <
   State,
   CaseReducers extends SliceCaseReducers<State>,
+  // eslint-disable-next-line
   Name extends RootStateKeyType
 >(
   options: CreateSliceOptions<State, CaseReducers, Name>,
