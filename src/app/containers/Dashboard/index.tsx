@@ -4,7 +4,7 @@
  *
  */
 import React, { memo, useState } from 'react';
-
+import { SideBar } from '../../components/SideBar/index';
 interface Props {}
 
 export const Dashboard = memo((props: Props) => {
@@ -13,6 +13,7 @@ export const Dashboard = memo((props: Props) => {
   return (
     <>
       {/* Left Side */}
+      <SideBar />
       <div
         className={`w-full h-full lg:hidden absolute top-0 z-40 transition duration-300 ease-in transform ${
           show ? 'translate-x-0' : '-translate-x-full'
@@ -34,8 +35,13 @@ export const Dashboard = memo((props: Props) => {
           left side
         </div>
       </div>
-      {/* Center content */}
+      {/* Center content */}a
       <div>
+        {/* <div className={`flex flex wrap`}>
+            <div className={`w-full xl:w-8/12 mb-12 xl::mb-0 px-4`}>
+              a
+            </div>
+          </div>*/}
         <button onClick={() => setShow(!show)}>Mostrar</button>
       </div>
       {/* Right side */}
