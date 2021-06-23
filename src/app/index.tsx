@@ -15,7 +15,7 @@ import { Dashboard } from './containers/Dashboard/Loadable';
 import { Login } from './containers/Login/Loadable';
 import { SignUp } from './containers/SignUp/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
-
+import { AddGame } from './containers/AddGame/Loadable';
 import RouteWrapper from './layouts/RouteWrapper';
 import { DefaultLayout } from './layouts/DefaultLayout';
 import { MainLayout } from './layouts/MainLayout';
@@ -46,6 +46,12 @@ export function App() {
           path="/dashboard"
           component={Dashboard}
           layout={MainLayout}
+        />
+        <RouteWrapper
+          exact
+          path="/addgame"
+          component={AddGame}
+          layout={DefaultLayout}
         />
         <RouteWrapper component={NotFoundPage} layout={DefaultLayout} />
       </Switch>
