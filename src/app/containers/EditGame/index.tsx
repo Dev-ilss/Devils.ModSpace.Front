@@ -1,17 +1,13 @@
 /**
  *
- * AddGame
+ * EditGame
  *
  */
 import React, { memo, useState } from 'react';
 
 interface Props {}
-interface Game {
-  title: string;
-  description: string;
-  image: string;
-}
-export const AddGame = memo((props: Props) => {
+
+export const EditGame = memo((props: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState();
@@ -37,7 +33,7 @@ export const AddGame = memo((props: Props) => {
         <div className="w-full grid grid-cols-2 gap-2">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h2 className="text-left text-oxford-blue font-bold text-3xl mb-12">
-              Agrega tu Juego
+              Editar Juego
             </h2>
             <form>
               <input
@@ -56,8 +52,8 @@ export const AddGame = memo((props: Props) => {
               />
               <label
                 className="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide 
-            uppercase border border-blue cursor-pointer hover:bg-neon-blue hover:text-white text-blue-600 
-            ease-linear transition-all duration-150"
+          uppercase border border-blue cursor-pointer hover:bg-neon-blue hover:text-white text-blue-600 
+          ease-linear transition-all duration-150"
               >
                 <i className="fas fa-cloud-upload-alt fa-3x"></i>
                 <span className="mt-2 text-base leading-normal">
@@ -74,8 +70,13 @@ export const AddGame = memo((props: Props) => {
               <div className="w-full grid grid-cols-2 gap-2">
                 <input
                   type="submit"
-                  value="Agregar"
+                  value="Guardar"
                   className="w-full bg-neon-blue hover:bg-persian-blue py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
+                />
+                <input
+                  type="submit"
+                  value="Eliminar"
+                  className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 />
               </div>
             </form>
