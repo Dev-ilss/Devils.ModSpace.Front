@@ -20,6 +20,8 @@ import RouteWrapper from './layouts/RouteWrapper';
 import { DefaultLayout } from './layouts/DefaultLayout';
 import { MainLayout } from './layouts/MainLayout';
 
+import { LOGIN_LINK, SIGN_UP_LINK, DASHBOARD_LINK } from '../utils/constants';
+
 export function App() {
   return (
     <BrowserRouter>
@@ -31,19 +33,19 @@ export function App() {
         <RouteWrapper exact path="/" component={Home} layout={DefaultLayout} />
         <RouteWrapper
           exact
-          path="/login"
+          path={LOGIN_LINK}
           component={Login}
           layout={DefaultLayout}
         />
         <RouteWrapper
           exact
-          path="/sign-up"
+          path={SIGN_UP_LINK}
           component={SignUp}
           layout={DefaultLayout}
         />
         <RouteWrapper
           exact
-          path="/dashboard"
+          path={DASHBOARD_LINK}
           component={Dashboard}
           layout={MainLayout}
         />

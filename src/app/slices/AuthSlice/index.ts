@@ -31,6 +31,7 @@ const slice = createSlice({
     loginError(state, { payload }: PayloadAction<any>) {
       state.error = payload;
     },
+    checkAuth(state, payload: PayloadAction) {},
   },
 });
 

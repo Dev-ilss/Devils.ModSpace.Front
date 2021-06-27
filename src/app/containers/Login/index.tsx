@@ -5,6 +5,7 @@
  */
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useAuthSlice } from '../../slices/AuthSlice';
@@ -48,11 +49,20 @@ export const Login = memo(() => {
             id="password"
             placeholder="Contraseña"
           />
-          <input
+          <button
             type="submit"
-            value="Iniciar sesión"
-            className="w-full bg-neon-blue hover:bg-persian-blue py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
-          />
+            className={`w-full bg-neon-blue hover:bg-persian-blue py-4 rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue`}
+            disabled={auth.isLoading}
+          >
+            {!auth.isLoading ? (
+              <>Iniciar sesión</>
+            ) : (
+              <div>
+                <span className="mr-2">Iniciando sesión</span>
+                <FontAwesomeIcon icon={['fas', 'spinner']} spin />
+              </div>
+            )}
+          </button>
         </form>
         <p className="text-center font-semibold">
           ¿No tienes cuenta? Registrate gratis{' '}

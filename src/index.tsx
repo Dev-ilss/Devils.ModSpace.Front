@@ -22,9 +22,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import { configureAppStore } from 'store/configureStore';
 
 import reportWebVitals from 'reportWebVitals';
+import './locales/i18n';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSpinner as fasSpinner } from '@fortawesome/free-solid-svg-icons';
+
+library.add(fasSpinner);
 
 // Initialize languages
-import './locales/i18n';
 
 const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;

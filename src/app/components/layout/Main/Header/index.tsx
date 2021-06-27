@@ -6,6 +6,8 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { LOGIN_LINK, SIGN_UP_LINK } from '../../../../../utils/constants';
+
 interface Props {}
 
 export const Header = memo((props: Props) => {
@@ -15,7 +17,7 @@ export const Header = memo((props: Props) => {
         <div className="mx-auto container px-6 py-2 xl:py-0">
           <div className="flex items-center justify-between">
             <div className="flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-start">
-              <div className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <svg
                   aria-label="Home"
                   id="logo"
@@ -36,12 +38,12 @@ export const Header = memo((props: Props) => {
                 <h2 className="hidden sm:block text-base text-gray-700 font-bold leading-normal pl-3">
                   ModSpace
                 </h2>
-              </div>
+              </Link>
             </div>
             <ul className="flex">
               <li className="hidden px-5 py-6 xl:flex">
                 <Link
-                  to="/login"
+                  to={LOGIN_LINK}
                   className="flex items-center text-sm leading-5 text-cadet-blue-crayola font-bold focus:outline-none transition duration-150 ease-in-out"
                 >
                   Iniciar Sesión
@@ -49,7 +51,7 @@ export const Header = memo((props: Props) => {
               </li>
               <li className="hidden px-5 py-6 xl:flex">
                 <Link
-                  to="/sign-up"
+                  to={SIGN_UP_LINK}
                   className="flex items-center text-sm leading-5 text-cadet-blue-crayola font-bold focus:outline-none transition duration-150 ease-in-out"
                 >
                   <button>Registrarse</button>
@@ -87,7 +89,7 @@ export const Header = memo((props: Props) => {
           <ul className="flex items-center">
             <li className="md:hidden px-5 flex items-center">
               <Link
-                to="/login"
+                to={LOGIN_LINK}
                 className="flex items-center text-sm leading-5 text-gray-700 outline-none focus:outline-none transition duration-150 ease-in-out"
               >
                 Iniciar Sesión
@@ -95,7 +97,7 @@ export const Header = memo((props: Props) => {
             </li>
             <li className="md:hidden px-5 flex items-center">
               <Link
-                to="/sign-up"
+                to={SIGN_UP_LINK}
                 className="flex items-center text-sm leading-5 text-gray-700 outline-none focus:outline-none transition duration-150 ease-in-out"
               >
                 Registrarse
@@ -103,7 +105,6 @@ export const Header = memo((props: Props) => {
             </li>
           </ul>
         </div>
-        {/*Mobile responsive sidebar*/}
       </nav>
     </header>
   );
