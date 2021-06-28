@@ -11,10 +11,8 @@ import { selectAuth } from '../../../../slices/AuthSlice/selectors';
 
 import { LOGIN_LINK, SIGN_UP_LINK } from '../../../../../utils/constants';
 
-interface Props {}
-
 export const Header = memo(({}) => {
-  const { isAuthenticated, user } = useSelector(selectAuth);
+  // const { isAuthenticated, user } = useSelector(selectAuth);
 
   return (
     <header className="block">
@@ -92,34 +90,24 @@ export const Header = memo(({}) => {
               </div>
             </Link>
           </div>
-          {isAuthenticated ? (
-            <ul className="flex items-center">
-              <li className="md:hidden px-5 flex items-center">
-                <p className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out">
-                  {user.user}
-                </p>
-              </li>
-            </ul>
-          ) : (
-            <ul className="flex items-center">
-              <li className="md:hidden px-5 flex items-center">
-                <Link
-                  to={LOGIN_LINK}
-                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
-                >
-                  Iniciar Sesión
-                </Link>
-              </li>
-              <li className="md:hidden px-5 flex items-center">
-                <Link
-                  to={SIGN_UP_LINK}
-                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
-                >
-                  Registrarse
-                </Link>
-              </li>
-            </ul>
-          )}
+          <ul className="flex items-center">
+            <li className="md:hidden px-5 flex items-center">
+              <Link
+                to={LOGIN_LINK}
+                className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
+              >
+                Iniciar Sesión
+              </Link>
+            </li>
+            <li className="md:hidden px-5 flex items-center">
+              <Link
+                to={SIGN_UP_LINK}
+                className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
+              >
+                Registrarse
+              </Link>
+            </li>
+          </ul>
         </div>
       </nav>
     </header>

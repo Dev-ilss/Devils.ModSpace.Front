@@ -7,6 +7,7 @@ import React, { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../slices/AuthSlice/selectors';
 
+import { SideBar } from '../../components/SideBar/index';
 interface Props {}
 
 export const Dashboard = memo((props: Props) => {
@@ -16,6 +17,7 @@ export const Dashboard = memo((props: Props) => {
   return (
     <>
       {/* Left Side */}
+      <SideBar />
       <div
         className={`w-full h-full lg:hidden absolute top-0 z-40 transition duration-300 ease-in transform ${
           show ? 'translate-x-0' : '-translate-x-full'
@@ -37,7 +39,7 @@ export const Dashboard = memo((props: Props) => {
           left side
         </div>
       </div>
-      {/* Center content */}
+      {/* Center content */}a
       <div>
         <button onClick={() => setShow(!show)}>
           {isAuthenticated ? user.user : 'Mostrar'}

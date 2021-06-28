@@ -15,7 +15,8 @@ import { Dashboard } from './containers/Dashboard/Loadable';
 import { Login } from './containers/Login/Loadable';
 import { SignUp } from './containers/SignUp/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
-
+import { AddGame } from './containers/AddGame/Loadable';
+import { EditGame } from './containers/EditGame/Loadable';
 import RouteWrapper from './layouts/RouteWrapper';
 import AuthRouteWrapper from './layouts/AuthRouteWrapper';
 import { DefaultLayout } from './layouts/DefaultLayout';
@@ -48,6 +49,18 @@ export function App() {
           exact
           path={SIGN_UP_LINK}
           component={SignUp}
+          layout={DefaultLayout}
+        />
+        <RouteWrapper
+          exact
+          path="/addgame"
+          component={AddGame}
+          layout={DefaultLayout}
+        />
+        <RouteWrapper
+          exact
+          path="/editgame"
+          component={EditGame}
           layout={DefaultLayout}
         />
         <RouteWrapper component={NotFoundPage} layout={DefaultLayout} />
