@@ -4,11 +4,14 @@
  *
  */
 import React, { memo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../slices/AuthSlice/selectors';
 
 interface Props {}
 
 export const Dashboard = memo((props: Props) => {
   let [show, setShow] = useState<boolean>(false);
+  const { isAuthenticated, user } = useSelector(selectAuth);
 
   return (
     <>
@@ -36,7 +39,9 @@ export const Dashboard = memo((props: Props) => {
       </div>
       {/* Center content */}
       <div>
-        <button onClick={() => setShow(!show)}>Mostrar</button>
+        <button onClick={() => setShow(!show)}>
+          {isAuthenticated ? user.user : 'Mostrar'}
+        </button>
       </div>
       {/* Right side */}
     </>

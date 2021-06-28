@@ -20,13 +20,13 @@ const AuthRouteWrapper = ({
   layout: Layout,
   ...routeConfig
 }) => {
-  const { isLoading, isAuthenticated, error } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const { actions } = useAuthSlice();
+  const { isLoading, isAuthenticated, error } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(actions.checkAuth());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   return isLoading ? (
     // TODO: Crear componente de carga
