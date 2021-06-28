@@ -7,7 +7,6 @@ import {
   LoginDto,
   SessionsService,
   serviceOptions,
-  UserEntity,
 } from '../../services/ms-service-proxy';
 
 import { LS_TOKEN, LS_USER } from '../../../utils/constants';
@@ -26,7 +25,7 @@ function* handleLogin({ payload }: PayloadAction<LoginDto>) {
 
     if (response.success) {
       localStorage.setItem(LS_TOKEN, response.token);
-      localStorage.setItem(LS_USER, response.data);
+      localStorage.setItem(LS_USER, JSON.stringify(response.data));
       yield put(actions.setUser(response.data));
     }
   } catch (e) {
@@ -37,7 +36,24 @@ function* handleLogin({ payload }: PayloadAction<LoginDto>) {
   }
 }
 
+function* handleCheckAuth() {
+  try {
+    yield put(actions.loading(true));
+    const token = localStorage.getItem(LS_TOKEN);
+    if (token) {
+      let user = localStorage.getItem(LS_USER);
+      user = JSON.parse(user + '');
+      yield put(actions.setUser(user));
+    }
+
+    yield put(actions.loading(false));
+  } catch (e) {
+    console.log('ERROR: CHECK AUTH');
+    yield put(actions.loading(false));
+  }
+}
+
 export function* authSaga() {
   yield takeLatest(actions.login.type, handleLogin);
-  // yield takeLatest(actions.checkAuth.type, handleCheckAuth);
+  yield takeLatest(actions.checkAuth.type, handleCheckAuth);
 }

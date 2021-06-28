@@ -4,11 +4,26 @@
  *
  */
 import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, Redirect } from 'react-router-dom';
+import { useAuthSlice } from '../../slices/AuthSlice';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../slices/AuthSlice/selectors';
+import { DASHBOARD_LINK } from 'utils/constants';
 
-interface Props {}
+interface LocationState {
+  from: {
+    pathname: string;
+  };
+}
 
-export const SignUp = memo((props: Props) => {
+export const SignUp = memo(({}) => {
+  const auth = useSelector(selectAuth);
+  const location = useLocation<LocationState>();
+
+  const { from } = location.state || { from: { pathname: DASHBOARD_LINK } };
+
+  if (auth.isAuthenticated) return <Redirect to={from} />;
+
   return (
     <>
       <div className="container mx-auto">

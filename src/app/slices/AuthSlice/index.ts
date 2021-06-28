@@ -6,12 +6,12 @@ import {
 } from '../../../utils/redux-injectors';
 import { authSaga } from './saga';
 import { AuthState } from './types';
-import { LoginDto, UserEntity } from '../../services/ms-service-proxy';
+import { LoginDto } from '../../services/ms-service-proxy';
 
 export const initialState: AuthState = {
   user: null,
   error: null,
-  isAuthenticated: null,
+  isAuthenticated: false,
   isLoading: false,
 };
 
@@ -23,7 +23,8 @@ const slice = createSlice({
     loading(state, { payload }: PayloadAction<boolean>) {
       state.isLoading = payload;
     },
-    setUser(state, { payload }: PayloadAction<UserEntity>) {
+    //TODO: Add user type
+    setUser(state, { payload }: PayloadAction<any>) {
       state.user = payload;
       state.isAuthenticated = true;
       state.error = null;

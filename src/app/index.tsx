@@ -17,6 +17,7 @@ import { SignUp } from './containers/SignUp/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 
 import RouteWrapper from './layouts/RouteWrapper';
+import AuthRouteWrapper from './layouts/AuthRouteWrapper';
 import { DefaultLayout } from './layouts/DefaultLayout';
 import { MainLayout } from './layouts/MainLayout';
 
@@ -31,6 +32,12 @@ export function App() {
 
       <Switch>
         <RouteWrapper exact path="/" component={Home} layout={DefaultLayout} />
+        <AuthRouteWrapper
+          exact
+          path={DASHBOARD_LINK}
+          component={Dashboard}
+          layout={MainLayout}
+        />
         <RouteWrapper
           exact
           path={LOGIN_LINK}
@@ -42,12 +49,6 @@ export function App() {
           path={SIGN_UP_LINK}
           component={SignUp}
           layout={DefaultLayout}
-        />
-        <RouteWrapper
-          exact
-          path={DASHBOARD_LINK}
-          component={Dashboard}
-          layout={MainLayout}
         />
         <RouteWrapper component={NotFoundPage} layout={DefaultLayout} />
       </Switch>

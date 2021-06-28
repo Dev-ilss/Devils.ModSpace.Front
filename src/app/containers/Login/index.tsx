@@ -4,7 +4,7 @@
  *
  */
 import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,13 @@ import { useSelector } from 'react-redux';
 import { selectAuth } from '../../slices/AuthSlice/selectors';
 
 import { LoginDto } from '../../services/ms-service-proxy';
+import { DASHBOARD_LINK } from 'utils/constants';
+
+interface LocationState {
+  from: {
+    pathname: string;
+  };
+}
 
 export const Login = memo(() => {
   const { register, handleSubmit } = useForm<LoginDto>({
@@ -21,8 +28,13 @@ export const Login = memo(() => {
   const dispatch = useDispatch();
   const { actions } = useAuthSlice();
   const auth = useSelector(selectAuth);
+  const location = useLocation<LocationState>();
+
+  const { from } = location.state || { from: { pathname: DASHBOARD_LINK } };
 
   const onSubmit = (data: LoginDto) => dispatch(actions.login(data));
+
+  if (auth.isAuthenticated) return <Redirect to={from} />;
 
   return (
     <>
