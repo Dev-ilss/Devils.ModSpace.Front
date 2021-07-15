@@ -25,9 +25,13 @@ import reportWebVitals from 'reportWebVitals';
 import './locales/i18n';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSpinner as fasSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSpinner as fasSpinner,
+  faPlus as fasPlus,
+  faBars as fasBars,
+} from '@fortawesome/free-solid-svg-icons';
 
-library.add(fasSpinner);
+library.add(fasSpinner, fasPlus, fasBars);
 
 // Initialize languages
 

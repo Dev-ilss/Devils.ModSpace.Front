@@ -33,12 +33,19 @@ const AuthRouteWrapper = ({
     <>Cargando</>
   ) : (
     <>
-      {error && <p>Hay un error</p>}
       <Route {...routeConfig} render={props => renderRoutedComponent(props)} />
     </>
   );
 
   function renderRoutedComponent(props) {
+    if (props.location.pathname === '/') {
+      return (
+        <Layout {...props}>
+          <Component {...props} />
+        </Layout>
+      );
+    }
+
     const isLoginOrSignUpPage =
       props.location.pathname.includes(LOGIN_LINK) ||
       props.location.pathname.includes(SIGN_UP_LINK);

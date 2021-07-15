@@ -6,8 +6,12 @@ import { authActions as actions } from '.';
 import {
   LoginDto,
   SessionsService,
+  UsersService,
   serviceOptions,
+  CreateUserDto,
 } from '../../services/ms-service-proxy';
+
+import { IUser } from '../../../types';
 
 import { LS_TOKEN, LS_USER } from '../../../utils/constants';
 
@@ -41,19 +45,47 @@ function* handleCheckAuth() {
     yield put(actions.loading(true));
     const token = localStorage.getItem(LS_TOKEN);
     if (token) {
-      let user = localStorage.getItem(LS_USER);
-      user = JSON.parse(user + '');
-      yield put(actions.setUser(user));
+      let userString = localStorage.getItem(LS_USER);
+      //FIXME: This is awful
+      let userObject = { ...JSON.parse(userString + '') } as IUser;
+      yield put(actions.setUser(userObject));
     }
 
     yield put(actions.loading(false));
   } catch (e) {
-    console.log('ERROR: CHECK AUTH');
+    //TODO: Do something when we catch an error
     yield put(actions.loading(false));
+  }
+}
+
+function* handleLogout() {
+  try {
+    yield put(actions.loading(true));
+    localStorage.removeItem(LS_TOKEN);
+    localStorage.removeItem(LS_USER);
+    yield put(actions.loading(false));
+  } catch (e) {
+    console.log('Error Logout', e);
+  }
+}
+
+function* handleRegister({ payload }: PayloadAction<CreateUserDto>) {
+  try {
+    yield put(actions.loading(true));
+
+    let response = yield call(UsersService.users1, { body: payload });
+    yield put(actions.loading(false));
+  } catch (e) {
+    //TODO: is this a promise? if it is, we need to resolved or something to
+    // extract the message
+    yield put(actions.loading(false));
+    yield put(actions.loginError(e.response.data.message));
   }
 }
 
 export function* authSaga() {
   yield takeLatest(actions.login.type, handleLogin);
+  yield takeLatest(actions.register.type, handleRegister);
   yield takeLatest(actions.checkAuth.type, handleCheckAuth);
+  yield takeLatest(actions.logout.type, handleLogout);
 }

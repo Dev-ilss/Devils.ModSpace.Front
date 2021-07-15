@@ -22,7 +22,13 @@ import AuthRouteWrapper from './layouts/AuthRouteWrapper';
 import { DefaultLayout } from './layouts/DefaultLayout';
 import { MainLayout } from './layouts/MainLayout';
 
-import { LOGIN_LINK, SIGN_UP_LINK, DASHBOARD_LINK } from '../utils/constants';
+import {
+  LOGIN_LINK,
+  SIGN_UP_LINK,
+  DASHBOARD_LINK,
+  ADD_GAME_LINK,
+  EDIT_GAME_LINK,
+} from '../utils/constants';
 
 export function App() {
   return (
@@ -32,34 +38,39 @@ export function App() {
       </Helmet>
 
       <Switch>
-        <RouteWrapper exact path="/" component={Home} layout={DefaultLayout} />
+        <AuthRouteWrapper
+          exact
+          path="/"
+          component={Home}
+          layout={DefaultLayout}
+        />
         <AuthRouteWrapper
           exact
           path={DASHBOARD_LINK}
           component={Dashboard}
           layout={MainLayout}
         />
-        <RouteWrapper
+        <AuthRouteWrapper
           exact
           path={LOGIN_LINK}
           component={Login}
           layout={DefaultLayout}
         />
-        <RouteWrapper
+        <AuthRouteWrapper
           exact
           path={SIGN_UP_LINK}
           component={SignUp}
           layout={DefaultLayout}
         />
-        <RouteWrapper
+        <AuthRouteWrapper
           exact
-          path="/addgame"
+          path={ADD_GAME_LINK}
           component={AddGame}
           layout={DefaultLayout}
         />
-        <RouteWrapper
+        <AuthRouteWrapper
           exact
-          path="/editgame"
+          path={`${EDIT_GAME_LINK}/:id`}
           component={EditGame}
           layout={DefaultLayout}
         />

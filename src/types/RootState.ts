@@ -1,4 +1,5 @@
 import { AuthState } from 'app/slices/AuthSlice/types';
+import { GameState } from 'app/slices/GameSlice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -7,5 +8,6 @@ import { AuthState } from 'app/slices/AuthSlice/types';
 */
 export interface RootState {
   auth?: AuthState;
+  game?: GameState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

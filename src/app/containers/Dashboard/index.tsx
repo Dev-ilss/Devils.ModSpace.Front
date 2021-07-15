@@ -3,47 +3,55 @@
  * Dashboard
  *
  */
-import React, { memo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectAuth } from '../../slices/AuthSlice/selectors';
+import React, { memo, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { selectGames } from '../../slices/GameSlice/selectors';
+import { useGameSlice } from '../../slices/GameSlice';
 
-import { SideBar } from '../../components/SideBar/index';
+import { ADD_GAME_LINK, EDIT_GAME_LINK } from '../../../utils/constants';
 interface Props {}
 
 export const Dashboard = memo((props: Props) => {
-  let [show, setShow] = useState<boolean>(false);
-  const { isAuthenticated, user } = useSelector(selectAuth);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { actions } = useGameSlice();
+  const { games } = useSelector(selectGames);
+
+  useEffect(() => {
+    dispatch(actions.loadGames());
+  }, [dispatch, actions]);
 
   return (
     <>
-      {/* Left Side */}
-      <SideBar />
-      <div
-        className={`w-full h-full lg:hidden absolute top-0 z-40 transition duration-300 ease-in transform ${
-          show ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div
-          className={`bg-gray-800 transition  ease-in-out w-full h-full ${
-            show
-              ? 'duration-200 delay-300 opacity-50'
-              : 'duration-150 opacity-0'
-          }`}
-          onClick={() => setShow(!show)}
-        />
-        <div
-          className={`fixed h-full overflow-y-auto z-40 top-0 transition duration-300 ease-in bg-red-400 shadow ${
-            show ? 'w-72' : 'w-0'
-          }`}
-        >
-          left side
+      <div className="col-span-3">
+        <div className="w-full my-3 grid grid-cols-3 bg-gray-200 py-10">
+          {games && games?.length > 0 ? (
+            games.map(game => (
+              <div
+                key={game.id}
+                onClick={() => {
+                  dispatch(actions.selectGame(game.id));
+                  history.push(`${EDIT_GAME_LINK}/${game.id}`);
+                }}
+                className="col-span-1 h-32 flex justify-center items-center text-gray-400 cursor-pointer"
+              >
+                {game.title}
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center font-semibold text-3xl h-32">
+              <h3>No hay juegos, añade uno!</h3>
+            </div>
+          )}
+          <div
+            onClick={() => history.push(ADD_GAME_LINK)}
+            className="col-span-1 h-32 flex justify-center items-center text-gray-400 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={['fas', 'plus']} size="3x" />
+          </div>
         </div>
-      </div>
-      {/* Center content */}a
-      <div>
-        <button onClick={() => setShow(!show)}>
-          {isAuthenticated ? user.user : 'Mostrar'}
-        </button>
       </div>
       {/* Right side */}
     </>

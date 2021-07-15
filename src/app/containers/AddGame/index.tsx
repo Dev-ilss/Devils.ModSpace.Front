@@ -4,96 +4,129 @@
  *
  */
 import React, { memo, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateGameDto } from '../../services/ms-service-proxy';
+import { useGameSlice } from '../../slices/GameSlice';
+import { selectGames } from '../../slices/GameSlice/selectors';
 
-interface Props {}
-interface Game {
-  title: string;
-  description: string;
-  image: string;
-}
-export const AddGame = memo((props: Props) => {
+const schema = yup.object().shape({
+  title: yup.string().required('Por favor, introduce el titulo del juego'),
+  description: yup
+    .string()
+    .required('Por favor, introduce la descripción del juego'),
+  imageName: yup
+    .mixed()
+    .required('Por favor selecciona una imagen')
+    .test('fileSize', value => {
+      return value && value[0].size <= 10000000;
+    }),
+});
+
+export const AddGame = memo(({}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState();
-  const [imagesrc, setImageSrc] = useState('');
+  const [image, setImage] = useState<any>();
+  const [imagesrc, setImageSrc] = useState<string | null>(null);
+  const { actions } = useGameSlice();
+  const dispatch = useDispatch();
+  const game = useSelector(selectGames);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<CreateGameDto>({
+    mode: 'onBlur',
+  });
+
   const onChange = e => {
-    console.log(e.target.name + ' ', e.target.value);
-    if (e.target.name === 'title') {
-      setTitle(e.target.value);
-    }
-    if (e.target.name === 'description') {
-      setDescription(e.target.value);
-    }
-    if (e.target.name === 'image') {
-      if (e.target.files && e.target.files[0]) {
-        setImage(e.target.files[0]);
-        setImageSrc(URL.createObjectURL(e.target.files[0]));
-      }
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setImageSrc(URL.createObjectURL(e.target.files[0]));
     }
   };
+
+  const onSubmit = (data: CreateGameDto) => {
+    dispatch(
+      actions.addGame({ ...data, imageName: image.name } as CreateGameDto),
+    );
+  };
+
   return (
     <>
       <div className="container mx-auto">
-        <div className="w-full grid grid-cols-2 gap-2">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h2 className="text-left text-oxford-blue font-bold text-3xl mb-12">
-              Agrega tu Juego
+        <div className="w-full grid grid-rows-2 px-4">
+          <div className="row-start-1 row-span-1 rounded overflow-auto">
+            {imagesrc ? (
+              <img className="w-full" src={imagesrc} />
+            ) : (
+              <div className="h-48 bg-gray-400"></div>
+            )}
+            <div className="w-full pt-10 pb-6 info">
+              <h3 className="text-4xl font-bold mb-4">{title}</h3>
+              <p className="text-lg">{description}</p>
+            </div>
+          </div>
+          <div className="row-start-2 row-span-1 bg-white">
+            <h2 className="text-left text-oxford-blue font-bold text-3xl mb-8">
+              Agrega un Juego
             </h2>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <input
-                className="form-input rounded border-neon-blue border-2 py-4 w-full mb-8"
+                className={`form-input rounded border-2 py-4 w-full ${
+                  game.error || errors.title
+                    ? 'border-red-600 text-red-600'
+                    : 'border-neon-blue'
+                }`}
                 type="text"
-                name="title"
+                {...register('title', { required: true })}
                 placeholder="Titulo"
-                onChange={onChange}
+                onChange={e => setTitle(e.target.value)}
               />
+              {errors.title && (
+                <p className="text-red-600">
+                  Por favor, introduce el titulo del juego
+                </p>
+              )}
               <input
-                className="form-input rounded border-neon-blue border-2 py-4 w-full mb-8"
+                className={`form-input rounded border-2 py-4 w-full mt-8 ${
+                  game.error || errors.description
+                    ? 'border-red-600 text-red-600'
+                    : 'border-neon-blue'
+                }`}
                 type="text"
-                name="description"
+                {...register('description', { required: true })}
                 placeholder="Descripción"
-                onChange={onChange}
+                onChange={e => setDescription(e.target.value)}
               />
-              <label
-                className="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide 
-            uppercase border border-blue cursor-pointer hover:bg-neon-blue hover:text-white text-blue-600 
-            ease-linear transition-all duration-150"
-              >
-                <i className="fas fa-cloud-upload-alt fa-3x"></i>
-                <span className="mt-2 text-base leading-normal">
+              {errors.description && (
+                <p className="text-red-600">
+                  Por favor, introduce la descripción del juego
+                </p>
+              )}
+              <label className="inline-block mt-8 px-4 pt-4 pb-6 bg-white rounded-md shadow-md tracking-wide border border-blue cursor-pointer hover:bg-neon-blue hover:text-white text-blue-600 font-semibold text-lg ease-linear transition-all duration-150">
+                <span className="text-base leading-normal">
                   Selecciona una Imagen
                 </span>
                 <input
                   type="file"
-                  name="image"
+                  {...register('imageName')}
                   onChange={onChange}
                   className="hidden"
                 />
               </label>
-              <br />
-              <div className="w-full grid grid-cols-2 gap-2">
-                <input
-                  type="submit"
-                  value="Agregar"
-                  className="w-full bg-neon-blue hover:bg-persian-blue py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
-                />
-              </div>
+              {errors.imageName && (
+                <p className="text-red-600">{errors.imageName.message}</p>
+              )}
+              <input
+                type="submit"
+                value="Agregar"
+                className="w-full mt-8 mb-10 bg-neon-blue hover:bg-persian-blue py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
+              />
             </form>
-          </div>
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div className="py-3 sm:max-w-xl sm:mx-auto">
-              <div className="bg-white shadow-lg border-gray-100 max-h-80	 border sm:rounded-3xl p-8 flex space-x-8">
-                <div className="h-48 overflow-visible w-1/2">
-                  <img className="rounded-3xl shadow-lg" src={imagesrc} />
-                </div>
-                <div className="flex flex-col w-1/2 space-y-4">
-                  <div className="flex justify-between items-start">
-                    <h2 className="text-3xl font-bold">{title}</h2>
-                  </div>
-                  <p>{description}</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

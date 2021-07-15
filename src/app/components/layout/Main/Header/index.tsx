@@ -4,15 +4,21 @@
  *
  */
 import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
-
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { selectAuth } from '../../../../slices/AuthSlice/selectors';
 
-import { LOGIN_LINK, SIGN_UP_LINK } from '../../../../../utils/constants';
+import {
+  DASHBOARD_LINK,
+  LOGIN_LINK,
+  SIGN_UP_LINK,
+} from '../../../../../utils/constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const Header = memo(({}) => {
-  // const { isAuthenticated, user } = useSelector(selectAuth);
+export const Header = memo(({ openMovileMenu }: any) => {
+  const { isAuthenticated } = useSelector(selectAuth);
+
+  const location = useLocation<any>();
 
   return (
     <header className="block">
@@ -66,7 +72,7 @@ export const Header = memo(({}) => {
       </nav>
       {/* Movil starts */}
       <nav>
-        <div className="py-4 px-2 w-full flex xl:hidden justify-between items-center bg-white sticky top-0 z-40">
+        <div className="py-4 px-2 w-full flex xl:hidden justify-between items-center bg-white sticky top-0 z-20">
           <div className="w-2/5 pl-5">
             <Link to="/">
               <div className="flex items-center">
@@ -90,24 +96,46 @@ export const Header = memo(({}) => {
               </div>
             </Link>
           </div>
-          <ul className="flex items-center">
-            <li className="md:hidden px-5 flex items-center">
-              <Link
-                to={LOGIN_LINK}
-                className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
-              >
-                Iniciar Sesión
-              </Link>
-            </li>
-            <li className="md:hidden px-5 flex items-center">
-              <Link
-                to={SIGN_UP_LINK}
-                className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
-              >
-                Registrarse
-              </Link>
-            </li>
-          </ul>
+          {isAuthenticated ? (
+            <ul className="flex items-center">
+              <li className="md:hidden px-5 flex items-center">
+                <Link
+                  to={DASHBOARD_LINK}
+                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              {location.pathname !== '/' && (
+                <li className="md:hidden px-5 flex items-center">
+                  <p className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out">
+                    <button onClick={() => openMovileMenu()}>
+                      <FontAwesomeIcon icon={['fas', 'bars']} size="lg" />
+                    </button>
+                  </p>
+                </li>
+              )}
+            </ul>
+          ) : (
+            <ul className="flex items-center">
+              <li className="md:hidden px-5 flex items-center">
+                <Link
+                  to={LOGIN_LINK}
+                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
+                >
+                  Iniciar Sesión
+                </Link>
+              </li>
+              <li className="md:hidden px-5 flex items-center">
+                <Link
+                  to={SIGN_UP_LINK}
+                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
+                >
+                  Registrarse
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
       </nav>
     </header>

@@ -6,10 +6,9 @@
 import React, { memo } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useAuthSlice } from '../../slices/AuthSlice';
-import { useSelector } from 'react-redux';
 import { selectAuth } from '../../slices/AuthSlice/selectors';
 
 import { LoginDto } from '../../services/ms-service-proxy';
@@ -28,13 +27,14 @@ export const Login = memo(() => {
   const dispatch = useDispatch();
   const { actions } = useAuthSlice();
   const auth = useSelector(selectAuth);
-  const location = useLocation<LocationState>();
-
-  const { from } = location.state || { from: { pathname: DASHBOARD_LINK } };
+  const location = useLocation<any>();
 
   const onSubmit = (data: LoginDto) => dispatch(actions.login(data));
 
-  if (auth.isAuthenticated) return <Redirect to={from} />;
+  if (auth.isAuthenticated)
+    return (
+      <Redirect to={location.state.from || { pathname: DASHBOARD_LINK }} />
+    );
 
   return (
     <>

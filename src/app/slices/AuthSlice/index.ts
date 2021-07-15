@@ -6,7 +6,8 @@ import {
 } from '../../../utils/redux-injectors';
 import { authSaga } from './saga';
 import { AuthState } from './types';
-import { LoginDto } from '../../services/ms-service-proxy';
+import { LoginDto, CreateUserDto } from '../../services/ms-service-proxy';
+import { IUser } from '../../../types';
 
 export const initialState: AuthState = {
   user: null,
@@ -23,16 +24,21 @@ const slice = createSlice({
     loading(state, { payload }: PayloadAction<boolean>) {
       state.isLoading = payload;
     },
-    //TODO: Add user type
-    setUser(state, { payload }: PayloadAction<any>) {
+    setUser(state, { payload }: PayloadAction<IUser>) {
       state.user = payload;
       state.isAuthenticated = true;
       state.error = null;
+      state.isLoading = false;
     },
     loginError(state, { payload }: PayloadAction<any>) {
       state.error = payload;
     },
     checkAuth(state, payload: PayloadAction) {},
+    logout(state, action: PayloadAction) {
+      state.isAuthenticated = false;
+      state.user = null;
+    },
+    register(state, action: PayloadAction<CreateUserDto>) {},
   },
 });
 
@@ -43,15 +49,3 @@ export const useAuthSlice = () => {
   useInjectSaga({ key: slice.name, saga: authSaga });
   return { actions: slice.actions };
 };
-
-/**
- * Example Usage:
- *
- * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useAuthSlice();
- *
- *  const onButtonClick = (evt) => {
- *    dispatch(actions.someAction());
- *   };
- * }
- */

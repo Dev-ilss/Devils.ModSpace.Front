@@ -4,55 +4,50 @@
  *
  */
 import React, { memo } from 'react';
+import { IUser } from 'types';
 
-interface Props {}
+import { useAuthSlice } from '../../slices/AuthSlice';
+import { useDispatch } from 'react-redux';
 
-export const SideBar = memo((props: Props) => {
+import profilePic from '../../../assets/profile.png';
+
+interface Props {
+  user: IUser | any;
+}
+
+export const SideBar = memo(({ user }: Props) => {
+  const dispatch = useDispatch();
+  const { actions } = useAuthSlice();
+
   return (
-    <div
-      className={`fixed flex flex-col top-14 left-0 w-14 hover:w-64 md:w-64 bg-purple-700 dark:hover:bg-gray-600 h-full text-white transition-all duration-300 border-none z-10 sidebar`}
-    >
-      <div
-        className={`overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow`}
-      >
-        <ul className={`flex flex-col py-4 space-y-1`}>
-          <li className={`px-5 hidden md:block`}>
-            <div className={`flex flex-row items-center h-8`}>
-              <div
-                className={`text-sm font-light tracking-wide text-gray-200 uppercase`}
-              >
-                mods
-              </div>
-            </div>
-          </li>
-          <li>
-            <a
-              href="/"
-              className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-purple-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-purple-500 dark:hover:border-gray-800 pr-6`}
-            >
-              <span className={`inline-flex justify-center items-center ml-4`}>
-                <svg
-                  className={`w-5 h-5`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  ></path>
-                </svg>
-              </span>
-              <span className={`ml-2 text-sm tracking-wide truncate`}>
-                Home
-              </span>
-            </a>
-          </li>
-        </ul>
+    <aside className="bg-white w-64 min-h-screen flex flex-col fixed top-0 z-40">
+      <div className="bg-white border-r border-b px-4 h-24 flex items-center">
+        <img
+          className="w-20 h-20 rounded mr-8"
+          src={profilePic}
+          alt="Foto de perfil"
+        />
+        <span>{user?.user}</span>
       </div>
-    </div>
+
+      <div className="border-r flex flex-grow">
+        <nav className="h-100 flex-grow">
+          <ul className="h-full flex flex-col">
+            <li className="p-3">
+              <p>Inicio</p>
+            </li>
+            <li className="p-3">
+              <p>Perfil</p>
+            </li>
+            <li className="p-3">
+              <p>Mis Mods</p>
+            </li>
+            <li className="mt-auto p-3">
+              <button onClick={() => dispatch(actions.logout())}>Salir</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
   );
 });

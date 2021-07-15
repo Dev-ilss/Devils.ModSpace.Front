@@ -1,9 +1,9 @@
-// import { UserEntity } from '../../services/ms-service-proxy';
+import { IUser } from '../../../types';
 
 /* --- STATE --- */
 //TODO: Add user type
 export interface AuthState {
-  user?: any | null;
+  user?: IUser | null;
   isAuthenticated: boolean;
   isLoading?: boolean;
   error?: string | null;
