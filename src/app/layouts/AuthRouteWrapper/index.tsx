@@ -26,7 +26,7 @@ const AuthRouteWrapper = ({
 
   useEffect(() => {
     dispatch(actions.checkAuth());
-  }, [dispatch, actions]);
+  }, []);
 
   return isLoading ? (
     // TODO: Crear componente de carga

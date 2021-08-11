@@ -3,6 +3,7 @@ import axios from 'axios';
 // import { take, call, put, select, takeLatest } from 'redux-saga/effects';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { authActions as actions } from '.';
+import { gameActions } from '../GameSlice';
 import {
   LoginDto,
   SessionsService,
@@ -10,13 +11,15 @@ import {
   serviceOptions,
   CreateUserDto,
 } from '../../services/ms-service-proxy';
+import { checkAuthExpiration } from '../utils';
 
+import { Token } from './types';
 import { IUser } from '../../../types';
 
-import { LS_TOKEN, LS_USER } from '../../../utils/constants';
+import { LS_TOKEN, LS_USER, API_BASE } from '../../../utils/constants';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
+  baseURL: API_BASE,
 });
 
 serviceOptions.axios = instance;
@@ -45,13 +48,15 @@ function* handleCheckAuth() {
     yield put(actions.loading(true));
     const token = localStorage.getItem(LS_TOKEN);
     if (token) {
-      let userString = localStorage.getItem(LS_USER);
-      //FIXME: This is awful
-      let userObject = { ...JSON.parse(userString + '') } as IUser;
-      yield put(actions.setUser(userObject));
+      if (checkAuthExpiration(token)) {
+        let userString = localStorage.getItem(LS_USER);
+        //FIXME: This is awful
+        let userObject = { ...JSON.parse(userString + '') } as IUser;
+        yield put(actions.setUser(userObject));
+      } else {
+        yield put(actions.logout());
+      }
     }
-
-    yield put(actions.loading(false));
   } catch (e) {
     //TODO: Do something when we catch an error
     yield put(actions.loading(false));
@@ -63,6 +68,7 @@ function* handleLogout() {
     yield put(actions.loading(true));
     localStorage.removeItem(LS_TOKEN);
     localStorage.removeItem(LS_USER);
+    yield put(gameActions.resetGames());
     yield put(actions.loading(false));
   } catch (e) {
     console.log('Error Logout', e);

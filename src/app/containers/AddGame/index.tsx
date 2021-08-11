@@ -6,24 +6,9 @@
 import React, { memo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { CreateGameDto } from '../../services/ms-service-proxy';
+import { CreateGameDto } from 'app/slices/GameSlice/types';
 import { useGameSlice } from '../../slices/GameSlice';
 import { selectGames } from '../../slices/GameSlice/selectors';
-
-const schema = yup.object().shape({
-  title: yup.string().required('Por favor, introduce el titulo del juego'),
-  description: yup
-    .string()
-    .required('Por favor, introduce la descripción del juego'),
-  imageName: yup
-    .mixed()
-    .required('Por favor selecciona una imagen')
-    .test('fileSize', value => {
-      return value && value[0].size <= 10000000;
-    }),
-});
 
 export const AddGame = memo(({}) => {
   const [title, setTitle] = useState('');
@@ -49,19 +34,17 @@ export const AddGame = memo(({}) => {
     }
   };
 
-  const onSubmit = (data: CreateGameDto) => {
-    dispatch(
-      actions.addGame({ ...data, imageName: image.name } as CreateGameDto),
-    );
+  const onSubmit = (fdata: CreateGameDto) => {
+    dispatch(actions.addGame({ ...fdata, image }));
   };
 
   return (
     <>
-      <div className="container mx-auto">
-        <div className="w-full grid grid-rows-2 px-4">
+      <div className="col-span-3 px-4 py-10">
+        <div className="w-full grid grid-rows-2">
           <div className="row-start-1 row-span-1 rounded overflow-auto">
             {imagesrc ? (
-              <img className="w-full" src={imagesrc} />
+              <img className="w-full" src={imagesrc} alt={image.name} />
             ) : (
               <div className="h-48 bg-gray-400"></div>
             )}
@@ -74,7 +57,10 @@ export const AddGame = memo(({}) => {
             <h2 className="text-left text-oxford-blue font-bold text-3xl mb-8">
               Agrega un Juego
             </h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              encType="multipart/form-data"
+            >
               <input
                 className={`form-input rounded border-2 py-4 w-full ${
                   game.error || errors.title
@@ -113,13 +99,13 @@ export const AddGame = memo(({}) => {
                 </span>
                 <input
                   type="file"
-                  {...register('imageName')}
+                  {...register('image')}
                   onChange={onChange}
                   className="hidden"
                 />
               </label>
-              {errors.imageName && (
-                <p className="text-red-600">{errors.imageName.message}</p>
+              {errors.image && (
+                <p className="text-red-600">{errors.image.message}</p>
               )}
               <input
                 type="submit"

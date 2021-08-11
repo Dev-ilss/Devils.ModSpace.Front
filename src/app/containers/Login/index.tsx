@@ -12,13 +12,7 @@ import { useAuthSlice } from '../../slices/AuthSlice';
 import { selectAuth } from '../../slices/AuthSlice/selectors';
 
 import { LoginDto } from '../../services/ms-service-proxy';
-import { DASHBOARD_LINK } from 'utils/constants';
-
-interface LocationState {
-  from: {
-    pathname: string;
-  };
-}
+import { DASHBOARD_LINK, SIGN_UP_LINK } from 'utils/constants';
 
 export const Login = memo(() => {
   const { register, handleSubmit } = useForm<LoginDto>({
@@ -79,7 +73,7 @@ export const Login = memo(() => {
         <p className="text-center font-semibold">
           ¿No tienes cuenta? Registrate gratis{' '}
           <Link
-            to="/sign-up"
+            to={SIGN_UP_LINK}
             className="text-neon-blue hover:text-persian-blue"
           >
             aquí

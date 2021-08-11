@@ -8,7 +8,7 @@ import { gameSaga } from './saga';
 import { GameState } from './types';
 import { IGame } from '../../../types';
 
-import { CreateGameDto, UpdateGameDto } from '../../services/ms-service-proxy';
+import { UpdateGameDto } from '../../services/ms-service-proxy';
 
 export const initialState: GameState = {
   games: [],
@@ -29,9 +29,14 @@ const slice = createSlice({
         game => game.id === action.payload,
       );
     },
-    addGame(state, action: PayloadAction<CreateGameDto>) {},
+    addGame(state, action: PayloadAction<any>) {},
     editGame(state, action: PayloadAction<UpdateGameDto>) {},
     delete(state, action: PayloadAction<number>) {},
+    getGameImage(state, action: PayloadAction<string>) {},
+    resetGames(state, action: PayloadAction) {
+      state.games = [];
+      state.selectedGame = null;
+    },
   },
 });
 

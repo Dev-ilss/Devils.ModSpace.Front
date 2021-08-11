@@ -5,37 +5,33 @@
  */
 import React, { memo } from 'react';
 import { Link, useLocation, Redirect } from 'react-router-dom';
-import { useAuthSlice } from '../../slices/AuthSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAuth } from '../../slices/AuthSlice/selectors';
 import { useForm } from 'react-hook-form';
+import { useAuthSlice } from '../../slices/AuthSlice';
+import { selectAuth } from '../../slices/AuthSlice/selectors';
+
 import { CreateUserDto } from '../../services/ms-service-proxy';
 import { DASHBOARD_LINK, LOGIN_LINK } from 'utils/constants';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-interface LocationState {
-  from: {
-    pathname: string;
-  };
-}
 
 export const SignUp = memo(({}) => {
-  const auth = useSelector(selectAuth);
-  const location = useLocation<LocationState>();
-  const dispatch = useDispatch();
-  const { actions } = useAuthSlice();
   const { register, handleSubmit } = useForm<CreateUserDto>({
     mode: 'onBlur',
   });
-
-  const { from } = location.state || { from: { pathname: DASHBOARD_LINK } };
+  const dispatch = useDispatch();
+  const { actions } = useAuthSlice();
+  const auth = useSelector(selectAuth);
+  const location = useLocation<any>();
 
   const onSubmit = (data: CreateUserDto) => {
     let formData = { ...data, status: true, roles: ['ADMIN'] } as CreateUserDto;
     dispatch(actions.register(formData));
   };
 
-  if (auth.isAuthenticated) return <Redirect to={from} />;
+  if (auth.isAuthenticated)
+    return (
+      <Redirect to={location.state.from || { pathname: DASHBOARD_LINK }} />
+    );
   return (
     <>
       <div className="container mx-auto">
@@ -110,7 +106,10 @@ export const SignUp = memo(({}) => {
         </form>
         <p className="text-center font-semibold">
           ¿Ya tienes cuenta? Inicia Sesión{' '}
-          <Link to="/login" className="text-neon-blue hover:text-persian-blue">
+          <Link
+            to={LOGIN_LINK}
+            className="text-neon-blue hover:text-persian-blue"
+          >
             aquí
           </Link>
           .

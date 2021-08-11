@@ -1,31 +1,18 @@
 /**
  *
- * AddGame
+ * EditGame
  *
  */
 import React, { memo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import * as yup from 'yup';
 import { UpdateGameDto } from '../../services/ms-service-proxy';
 import { useGameSlice } from '../../slices/GameSlice';
 import { selectGame } from '../../slices/GameSlice/selectors';
 import { IGame } from 'types';
-import { RootState } from 'types';
 
-const schema = yup.object().shape({
-  title: yup.string().required('Por favor, introduce el titulo del juego'),
-  description: yup
-    .string()
-    .required('Por favor, introduce la descripción del juego'),
-  imageName: yup
-    .mixed()
-    .required('Por favor selecciona una imagen')
-    .test('fileSize', value => {
-      return value && value[0].size <= 10000000;
-    }),
-});
+import { API_BASE, API_PICTURE } from 'utils/constants';
 
 export const EditGame = memo(({}) => {
   const [title, setTitle] = useState<string | undefined>('');
@@ -58,25 +45,36 @@ export const EditGame = memo(({}) => {
   };
 
   const onSubmit = (data: IGame) => {
-    dispatch(actions.editGame({ ...data, imageName: image.name, id } as IGame));
+    dispatch(
+      actions.editGame({
+        ...data,
+        imageName: image.name,
+        imagePath: game?.imagePath,
+        id,
+      } as IGame),
+    );
   };
 
   return (
     <>
-      <div className="container mx-auto">
-        <div className="w-full grid grid-rows-2 px-4">
+      <div className="col-span-3 px-4 py-10">
+        <div className="w-full grid grid-rows-2">
           <div className="row-start-1 row-span-1 rounded overflow-auto">
             {imagesrc ? (
               <img className="w-full" src={imagesrc} />
             ) : (
-              <div className="h-48 bg-gray-400"></div>
+              <img
+                className="w-full"
+                src={`${API_BASE}${API_PICTURE}${game?.imagePath}`}
+                alt={game?.imageName}
+              />
             )}
+          </div>
+          <div className="row-start-2 row-span-1 bg-white">
             <div className="w-full pt-10 pb-6 info">
               <h3 className="text-4xl font-bold mb-4">{title}</h3>
               <p className="text-lg">{description}</p>
             </div>
-          </div>
-          <div className="row-start-2 row-span-1 bg-white">
             <h2 className="text-left text-oxford-blue font-bold text-3xl mb-8">
               Editar un Juego
             </h2>
@@ -130,18 +128,21 @@ export const EditGame = memo(({}) => {
                 <p className="text-red-600">{errors.imageName.message}</p>
               )}
             </form>
-            <input
-              form="editGameForm"
-              type="submit"
-              value="Guardar"
-              className="w-1/2 mt-8 inline bg-neon-blue hover:bg-persian-blue py-4 rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
-            />
-            <button
-              onClick={() => dispatch(actions.delete(id))}
-              className="w-1/2 bg-purple-500 hover:bg-purple-600 mt-8 mb-10 py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-purple-600"
-            >
-              Eliminar
-            </button>
+            <div className="w-full grid grid-cols-2 gap-3">
+              <button
+                form="editGameForm"
+                type="submit"
+                className="bg-neon-blue hover:bg-persian-blue mt-8 mb-10 py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-persian-blue"
+              >
+                Guardar
+              </button>
+              <button
+                onClick={() => dispatch(actions.delete(id))}
+                className="bg-purple-500 hover:bg-purple-600 mt-8 mb-10 py-4  rounded text-white font-semibold text-lg border-b-8 border-rounded cursor-pointer border-purple-600"
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       </div>

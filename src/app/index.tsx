@@ -66,13 +66,13 @@ export function App() {
           exact
           path={ADD_GAME_LINK}
           component={AddGame}
-          layout={DefaultLayout}
+          layout={MainLayout}
         />
         <AuthRouteWrapper
           exact
           path={`${EDIT_GAME_LINK}/:id`}
           component={EditGame}
-          layout={DefaultLayout}
+          layout={MainLayout}
         />
         <RouteWrapper component={NotFoundPage} layout={DefaultLayout} />
       </Switch>

@@ -6,3 +6,13 @@ export interface GameState {
   error?: string | null;
   selectedGame?: IGame | null;
 }
+
+export interface CreateGameDto {
+  title?: string;
+  description?: string;
+  image?: any;
+}
+
+export interface GamesPictures {
+  name?: string;
+}

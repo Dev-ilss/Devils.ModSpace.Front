@@ -23,11 +23,14 @@ export const SideBar = memo(({ user }: Props) => {
     <aside className="bg-white w-64 min-h-screen flex flex-col fixed top-0 z-40">
       <div className="bg-white border-r border-b px-4 h-24 flex items-center">
         <img
-          className="w-20 h-20 rounded mr-8"
+          className="w-20 h-20 rounded mr-2"
           src={profilePic}
           alt="Foto de perfil"
         />
-        <span>{user?.user}</span>
+        <div>
+          <span className="block font-semibold">{user?.user}</span>
+          <span className="block text-xs text-gray-400 ">{user?.email}</span>
+        </div>
       </div>
 
       <div className="border-r flex flex-grow">

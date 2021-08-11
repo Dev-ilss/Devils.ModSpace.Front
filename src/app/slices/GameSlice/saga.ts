@@ -1,20 +1,21 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { take, call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { gameActions as actions } from '.';
-import { IGame } from '../../../types';
+import { authActions } from '../AuthSlice';
 
-import { LS_TOKEN } from '../../../utils/constants';
+import { LS_TOKEN, API_BASE } from '../../../utils/constants';
 
 import {
-  CreateGameDto,
   UpdateGameDto,
   serviceOptions,
   GamesService,
 } from '../../services/ms-service-proxy';
 
+import { checkAuthExpiration } from '../utils/index';
+
 const instance = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
+  baseURL: API_BASE,
 });
 
 serviceOptions.axios = instance;
@@ -29,9 +30,12 @@ function* loadGames() {
         },
       };
 
-      let response = yield call(GamesService.games, options);
-
-      yield put(actions.setGames(response.data));
+      if (checkAuthExpiration(token)) {
+        let response = yield call(GamesService.games, options);
+        yield put(actions.setGames(response.data));
+      } else {
+        yield put(authActions.logout());
+      }
     }
   } catch (e) {
     //TODO: DO something when an error occur
@@ -42,7 +46,7 @@ function* loadGames() {
   }
 }
 
-function* addGame({ payload }: PayloadAction<CreateGameDto>) {
+function* addGame({ payload }: PayloadAction<any>) {
   try {
     let token = localStorage.getItem(LS_TOKEN);
     if (token) {
@@ -51,12 +55,19 @@ function* addGame({ payload }: PayloadAction<CreateGameDto>) {
           Authorization: `Bearer ${token}`,
         },
       };
-      let response = yield call(
-        GamesService.games1,
-        { body: payload },
-        options,
-      );
-      console.log(response);
+
+      if (checkAuthExpiration(token)) {
+        let response = yield call(
+          GamesService.games1,
+          {
+            ...payload,
+          },
+          options,
+        );
+        console.log(response);
+      } else {
+        yield put(authActions.logout());
+      }
     }
   } catch (e) {
     //TODO: Do something with the error
@@ -74,7 +85,16 @@ function* deleteGame({ payload }: PayloadAction<number>) {
         },
       };
 
-      let response = yield call(GamesService.games4, { id: payload }, options);
+      if (checkAuthExpiration(token)) {
+        let response = yield call(
+          GamesService.games4,
+          { id: payload },
+          options,
+        );
+        console.log('DELETE GAME', response);
+      } else {
+        yield put(authActions.logout());
+      }
     }
   } catch (e) {
     // TODO: Do something with the error
@@ -91,17 +111,48 @@ function* editGame({ payload }: PayloadAction<any>) {
         },
       };
 
-      let response = yield call(
-        GamesService.games3,
-        {
-          id: payload.id,
-          body: { ...payload } as UpdateGameDto,
-        },
-        options,
-      );
+      if (checkAuthExpiration(token)) {
+        let { id, ...rest } = payload;
+
+        let response = yield call(
+          GamesService.games3,
+          {
+            id: id,
+            body: { ...rest } as UpdateGameDto,
+          },
+          options,
+        );
+        console.log(response);
+      } else {
+        yield put(authActions.logout());
+      }
     }
   } catch (e) {
     // TODO: Do something with the error
+  }
+}
+
+function* getGameImage({ payload }: PayloadAction<string>) {
+  try {
+    let token = localStorage.getItem(LS_TOKEN);
+    if (token) {
+      let options = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      let response = yield call(
+        GamesService.picture,
+        { imageId: payload },
+        options,
+      );
+
+      console.log('SAGA:GAME_SAGA::Picture', response);
+    }
+  } catch (e) {
+    // TODO: Do something with the error
+    console.error('ERROR CARGANDO IMAGEN:: SAGA', e);
   }
 }
 
@@ -110,4 +161,5 @@ export function* gameSaga() {
   yield takeLatest(actions.addGame, addGame);
   yield takeLatest(actions.delete, deleteGame);
   yield takeLatest(actions.editGame, editGame);
+  yield takeLatest(actions.getGameImage, getGameImage);
 }
