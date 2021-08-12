@@ -48,7 +48,7 @@ export const EditGame = memo(({}) => {
     dispatch(
       actions.editGame({
         ...data,
-        imageName: image.name,
+        imageName: image,
         imagePath: game?.imagePath,
         id,
       } as IGame),
@@ -57,20 +57,20 @@ export const EditGame = memo(({}) => {
 
   return (
     <>
-      <div className="col-span-3 px-4 py-10">
-        <div className="w-full grid grid-rows-2">
-          <div className="row-start-1 row-span-1 rounded overflow-auto">
+      <div className="col-span-3 lg:col-span-8 px-4 py-10">
+        <div className="w-full grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1">
+          <div className="row-start-1 row-span-1 lg:col-span-1 rounded overflow-auto lg:flex lg:justify-center lg:items-center">
             {imagesrc ? (
-              <img className="w-full" src={imagesrc} />
+              <img className="w-full lg:w-4/5" src={imagesrc} />
             ) : (
               <img
-                className="w-full"
+                className="w-full lg:w-4/5"
                 src={`${API_BASE}${API_PICTURE}${game?.imagePath}`}
                 alt={game?.imageName}
               />
             )}
           </div>
-          <div className="row-start-2 row-span-1 bg-white">
+          <div className="row-start-2 lg:row-start-1 row-span-1 lg:col-span-1 bg-white lg:flex lg:flex-col lg:justify-between lg:w-2/3 mx-auto">
             <div className="w-full pt-10 pb-6 info">
               <h3 className="text-4xl font-bold mb-4">{title}</h3>
               <p className="text-lg">{description}</p>
@@ -112,20 +112,6 @@ export const EditGame = memo(({}) => {
                 <p className="text-red-600">
                   Por favor, introduce la descripción del juego
                 </p>
-              )}
-              <label className="inline-block mt-8 px-4 pt-4 pb-6 bg-white rounded-md shadow-md tracking-wide border border-blue cursor-pointer hover:bg-neon-blue hover:text-white text-blue-600 font-semibold text-lg ease-linear transition-all duration-150">
-                <span className="text-base leading-normal">
-                  Selecciona una Imagen
-                </span>
-                <input
-                  type="file"
-                  {...register('imageName')}
-                  onChange={onChange}
-                  className="hidden"
-                />
-              </label>
-              {errors.imageName && (
-                <p className="text-red-600">{errors.imageName.message}</p>
               )}
             </form>
             <div className="w-full grid grid-cols-2 gap-3">

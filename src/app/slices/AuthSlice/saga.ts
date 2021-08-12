@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-// import { take, call, put, select, takeLatest } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { authActions as actions } from '.';
 import { gameActions } from '../GameSlice';
@@ -16,7 +16,12 @@ import { checkAuthExpiration } from '../utils';
 import { Token } from './types';
 import { IUser } from '../../../types';
 
-import { LS_TOKEN, LS_USER, API_BASE } from '../../../utils/constants';
+import {
+  LS_TOKEN,
+  LS_USER,
+  API_BASE,
+  LOGIN_LINK,
+} from '../../../utils/constants';
 
 const instance = axios.create({
   baseURL: API_BASE,
@@ -57,6 +62,7 @@ function* handleCheckAuth() {
         yield put(actions.logout());
       }
     }
+    yield put(actions.loading(false));
   } catch (e) {
     //TODO: Do something when we catch an error
     yield put(actions.loading(false));
@@ -79,8 +85,9 @@ function* handleRegister({ payload }: PayloadAction<CreateUserDto>) {
   try {
     yield put(actions.loading(true));
 
-    let response = yield call(UsersService.users1, { body: payload });
+    yield call(UsersService.users1, { body: payload });
     yield put(actions.loading(false));
+    window.location.href = LOGIN_LINK;
   } catch (e) {
     //TODO: is this a promise? if it is, we need to resolved or something to
     // extract the message

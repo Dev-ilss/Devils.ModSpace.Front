@@ -13,6 +13,9 @@ module.exports = {
         'cadet-blue-crayola': '#A0A7BC',
       },
     },
+    minHeight: {
+      '90-screen': 'calc(100%-100px)',
+    },
   },
   variants: {
     extend: {

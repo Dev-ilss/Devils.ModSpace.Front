@@ -3,8 +3,9 @@ import axios from 'axios';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { gameActions as actions } from '.';
 import { authActions } from '../AuthSlice';
+import { push } from 'react-router-redux';
 
-import { LS_TOKEN, API_BASE } from '../../../utils/constants';
+import { LS_TOKEN, API_BASE, DASHBOARD_LINK } from '../../../utils/constants';
 
 import {
   UpdateGameDto,
@@ -64,7 +65,7 @@ function* addGame({ payload }: PayloadAction<any>) {
           },
           options,
         );
-        console.log(response);
+        window.location.href = DASHBOARD_LINK;
       } else {
         yield put(authActions.logout());
       }
@@ -91,7 +92,7 @@ function* deleteGame({ payload }: PayloadAction<number>) {
           { id: payload },
           options,
         );
-        console.log('DELETE GAME', response);
+        window.location.href = DASHBOARD_LINK;
       } else {
         yield put(authActions.logout());
       }
@@ -122,7 +123,7 @@ function* editGame({ payload }: PayloadAction<any>) {
           },
           options,
         );
-        console.log(response);
+        window.location.href = DASHBOARD_LINK;
       } else {
         yield put(authActions.logout());
       }

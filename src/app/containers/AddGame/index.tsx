@@ -40,20 +40,24 @@ export const AddGame = memo(({}) => {
 
   return (
     <>
-      <div className="col-span-3 px-4 py-10">
-        <div className="w-full grid grid-rows-2">
-          <div className="row-start-1 row-span-1 rounded overflow-auto">
+      <div className="col-span-3 lg:col-span-8 px-4 py-10">
+        <div className="w-full grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1">
+          <div className="row-start-1 row-span-1 lg:col-span-1 rounded overflow-auto lg:flex lg:justify-center lg:items-center">
             {imagesrc ? (
-              <img className="w-full" src={imagesrc} alt={image.name} />
+              <img
+                className="w-full lg:w-4/5"
+                src={imagesrc}
+                alt={image.name}
+              />
             ) : (
-              <div className="h-48 bg-gray-400"></div>
+              <div className="h-full lg:w-4/5 bg-gray-400"></div>
             )}
+          </div>
+          <div className="row-start-2 lg:row-start-1 row-span-1 lg:col-span-1 bg-white lg:flex lg:flex-col lg:justify-between lg:w-2/3 mx-auto">
             <div className="w-full pt-10 pb-6 info">
               <h3 className="text-4xl font-bold mb-4">{title}</h3>
               <p className="text-lg">{description}</p>
             </div>
-          </div>
-          <div className="row-start-2 row-span-1 bg-white">
             <h2 className="text-left text-oxford-blue font-bold text-3xl mb-8">
               Agrega un Juego
             </h2>

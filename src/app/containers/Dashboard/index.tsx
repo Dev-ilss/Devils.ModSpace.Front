@@ -8,7 +8,10 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { selectGames } from '../../slices/GameSlice/selectors';
+import { selectAuth } from 'app/slices/AuthSlice/selectors';
 import { useGameSlice } from '../../slices/GameSlice';
+import { SideBar } from 'app/components/SideBar';
+import { isMobileOnly } from 'react-device-detect';
 
 import { Image } from '../../components/layout/Main/Image/Loadable';
 
@@ -20,6 +23,7 @@ export const Dashboard = memo((props: Props) => {
   const history = useHistory();
   const { actions } = useGameSlice();
   const { games } = useSelector(selectGames);
+  const { user } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(actions.loadGames());
@@ -27,11 +31,11 @@ export const Dashboard = memo((props: Props) => {
 
   return (
     <>
-      <div className="col-span-3 px-4 py-10">
+      <div className="col-span-3 px-4 py-10 lg:col-span-4 lg:col-start-3">
         <h1 className="text-oxford-blue font-bold text-2xl">
           TODOS LOS JUEGOS
         </h1>
-        <div className="w-full my-3 grid grid-cols-2 gap-4">
+        <div className="w-full my-3 grid grid-cols-2 md:grid-cols-4 gap-4">
           {games && games?.length > 0 ? (
             games.map((game, index) => (
               <div

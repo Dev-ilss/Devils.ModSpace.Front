@@ -20,7 +20,7 @@ export const SideBar = memo(({ user }: Props) => {
   const { actions } = useAuthSlice();
 
   return (
-    <aside className="bg-white w-64 min-h-screen flex flex-col fixed top-0 z-40">
+    <aside className="bg-white w-64 min-h-full lg:h-screen flex flex-col fixed top-0 left-0 z-40 md:col-span-2">
       <div className="bg-white border-r border-b px-4 h-24 flex items-center">
         <img
           className="w-20 h-20 rounded mr-2"
@@ -45,7 +45,7 @@ export const SideBar = memo(({ user }: Props) => {
             <li className="p-3">
               <p>Mis Mods</p>
             </li>
-            <li className="mt-auto p-3">
+            <li className="mt-auto mb-24 p-3">
               <button onClick={() => dispatch(actions.logout())}>Salir</button>
             </li>
           </ul>

@@ -21,8 +21,8 @@ export const Header = memo(({ openMovileMenu }: any) => {
   const location = useLocation<any>();
   return (
     <header className="block">
-      <nav className="bg-white xl:block hidden">
-        <div className="mx-auto container px-6 py-2 xl:py-0">
+      <nav className="bg-white md:block hidden">
+        <div className="mx-auto container px-6 py-2">
           <div className="flex items-center justify-between">
             <div className="flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-start">
               <Link
@@ -51,32 +51,44 @@ export const Header = memo(({ openMovileMenu }: any) => {
                 </h2>
               </Link>
             </div>
-            <ul className="flex">
-              <li className="hidden px-5 py-6 xl:flex">
-                <Link
-                  to={LOGIN_LINK}
-                  className="flex items-center text-sm leading-5 text-cadet-blue-crayola font-bold focus:outline-none transition duration-150 ease-in-out"
-                >
-                  Iniciar Sesión
-                </Link>
-              </li>
-              <li className="hidden px-5 py-6 xl:flex">
-                <Link
-                  to={SIGN_UP_LINK}
-                  className="flex items-center text-sm leading-5 text-cadet-blue-crayola font-bold focus:outline-none transition duration-150 ease-in-out"
-                >
-                  <button>Registrarse</button>
-                </Link>
-              </li>
-            </ul>
+            {!isAuthenticated ? (
+              <ul className="flex">
+                <li className="px-5 py-6 flex">
+                  <Link
+                    to={LOGIN_LINK}
+                    className="flex items-center text-sm leading-5 text-black-400 font-semibold focus:outline-none transition duration-150 ease-in-out"
+                  >
+                    Iniciar Sesión
+                  </Link>
+                </li>
+                <li className="px-5 py-6 flex">
+                  <Link
+                    to={SIGN_UP_LINK}
+                    className="flex items-center text-sm leading-5 text-black-400 font-semibold focus:outline-none transition duration-150 ease-in-out"
+                  >
+                    Registrarse
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul className="flex">
+                <li className="px-5 py-6 flex">
+                  <p className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out">
+                    <button onClick={() => openMovileMenu()}>
+                      <FontAwesomeIcon icon={['fas', 'bars']} size="lg" />
+                    </button>
+                  </p>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </nav>
       {/* Movil starts */}
       <nav>
-        <div className="py-4 px-2 w-full flex xl:hidden justify-between items-center bg-white sticky top-0 z-20">
+        <div className="py-4 px-2 w-full flex md:hidden justify-between items-center bg-white sticky top-0 z-20">
           <div className="w-2/5 pl-5">
-            <Link to="/">
+            <Link to={isAuthenticated ? DASHBOARD_LINK : '/'}>
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -100,14 +112,6 @@ export const Header = memo(({ openMovileMenu }: any) => {
           </div>
           {isAuthenticated ? (
             <ul className="flex items-center">
-              <li className="md:hidden px-5 flex items-center">
-                <Link
-                  to={DASHBOARD_LINK}
-                  className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out"
-                >
-                  Dashboard
-                </Link>
-              </li>
               {location.pathname !== '/' && (
                 <li className="md:hidden px-5 flex items-center">
                   <p className="flex items-center text-sm leading-5 text-gray-700 font-semibold focus:outline-none transition duration-150 ease-in-out">

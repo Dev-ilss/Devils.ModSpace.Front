@@ -34,7 +34,7 @@ export const SignUp = memo(({}) => {
     );
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto lg:w-1/3">
         <h2 className="text-center text-oxford-blue font-bold text-3xl mb-12">
           Registrate
         </h2>

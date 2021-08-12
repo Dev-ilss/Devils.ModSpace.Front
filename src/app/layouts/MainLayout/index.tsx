@@ -9,6 +9,7 @@ import Transition from '../../components/Transition';
 import { Header } from 'app/components/layout/Main/Header';
 import { useSelector } from 'react-redux';
 import { selectAuth } from 'app/slices/AuthSlice/selectors';
+import { isMobile } from 'react-device-detect';
 
 interface Props {
   children: any;
@@ -20,7 +21,7 @@ export const MainLayout = memo(({ children }: Props) => {
   return (
     <>
       <Header openMovileMenu={() => setIsClosed(!isClosed)} />
-      <div className="grid grid-cols-3 relative h-screen">
+      <div className="grid grid-cols-3 lg:grid-cols-8 h-screen container mx-auto">
         <Transition
           show={!isClosed}
           enter="transition-all duration-500"
